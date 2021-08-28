@@ -1,0 +1,110 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+@model InfoVM
+
+<div class="text-center">   
+    <div class="text-left">
+        <h1 class="display-4">User List</h1>
+        <div class="row p-5">
+            <div class="col-md-12">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th class="border-0 text-uppercase small font-weight-bold">Name</th>
+                            <th class="border-0 text-uppercase small font-weight-bold">Email</th>
+                            <th class="border-0 text-uppercase small font-weight-bold">Gender</th>
+                            <th class="border-0 text-uppercase small font-weight-bold">State</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var user in Model.InfUsers)
+                        {
+                            <tr>
+                                <td>@user.Name</td>
+                                <td>@user.Email</td>
+                                <td>
+                                    @if (user.Gender == "male")
+                                    {
+                                        <img src="~/images/male.png" asp-append-version="true">
+                                    }
+                                    else
+                                    {
+                                        <img src="~/images/female.png" asp-append-version="true">
+                                    }
+                                </td>
+                                <td>
+                                    @if (user.Status == "active") {
+                                        <img src="~/images/up.png" asp-append-version="true">
+                                    }else {
+                                        <img src="~/images/down.png" asp-append-version="true">
+                                    }
+
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div >
+        @if (Model.InfPagination.Page > 1)
+        {
+            @Html.ActionLink("<<", "Index", new { direccionAPI = Model.InfPagination.Links.Previous.ToString() },
+                            new { @class = "btn btn-danger" })
+            <span></span>
+            @Html.ActionLink("Anterior", "Index", new { direccionAPI = Model.InfPagination.Links.Previous.ToString() },
+                            new { @class = "btn btn-secondary" })
+        }
+        else
+        {
+            @Html.ActionLink("<<", "Index", new { direccionAPI = Model.InfPagination.Links.Current.ToString() },
+                            new { @class = "btn btn-danger disabled" })
+            <span></span>
+            @Html.ActionLink("Anterior", "Index", new { pagina = 1 },
+                            new { @class = "btn btn-secondary disabled" })
+        }
+        <span></span>
+        @if (Model.InfPagination.Total > 0)
+        {
+            <span>
+                Página  <strong>@Model.InfPagination.Page</strong> de <strong>@Model.InfPagination.Pages</strong>
+            </span>
+            <span>&nbsp;|&nbsp;</span>
+            <span>
+                Filas por página:  <strong>@Model.InfPagination.Limit</strong>
+            </span>
+            <span>&nbsp;|&nbsp;</span>
+            <span>
+                Total de filas:  <strong>@Model.InfPagination.Total</strong>
+            </span>
+
+            <span>&nbsp;|&nbsp;</span>
+        }
+        else
+        {
+            <span>No hay resultados para esta búsqueda</span>
+            <span>&nbsp;|&nbsp;</span>
+        }
+
+
+        @if (Model.InfPagination.Page < Model.InfPagination.Total)
+        {
+            @Html.ActionLink("Siguiente", "Index", new { addressAPI = Model.InfPagination.Links.Next.ToString() },
+                            new { @class = "btn btn-secondary" })
+            <span></span>
+            @Html.ActionLink(">>", "Index", new { addressAPI = Model.InfPagination.Links.Next.ToString() },
+                            new { @class = "btn btn btn-danger" })
+        }
+        else
+        {
+            @Html.ActionLink("Siguiente", "Index", new { addressAPI = Model.InfPagination.Links.Next.ToString() },
+                            new { @class = "btn btn-secondary disabled" })
+            <span></span>
+            @Html.ActionLink(">>", "Index", new { addressAPI = Model.InfPagination.Links.Next.ToString() },
+                            new { @class = "btn btn-danger disabled" })
+        }
+    </div>
+
+</div>
